@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn" monitorInterval="5">
+    <properties>
+        <property name="LOG_HOME">/root/myblog/logs</property>
+    </properties>
+
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%-5level] %c{36}:%L:%n>>>    %m%n" />
+        </Console>
+
+        <RollingRandomAccessFile name="file"
+                                 fileName="${LOG_HOME}/myblog-log.log"
+                                 filePattern="${LOG_HOME}/myblog-log-%d{yyyy-MM-dd HH-mm}.log">
+            <PatternLayout
+                    pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+            <Policies>
+                <SizeBasedTriggeringPolicy size="5 MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="8"
+                                     tempCompressedFilePattern="${LOG_HOME}/$${date:yyyy-MM}/myblog-log-%d{yyyy-MM-dd HH-mm}-%i.zip"
+            />
+        </RollingRandomAccessFile>
+    </Appenders>
+
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="console" />
+        </Root>
+    </Loggers>
+</Configuration>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xyz.idaoteng.myblog.blog.dao.ArticleMapper" >
+    <resultMap id="articleCatalog" type="xyz.idaoteng.myblog.blog.entity.vo.ArticleCatalog" >
+        <id property="articleId" column="article_id"
+            typeHandler="xyz.idaoteng.myblog.typeHandler.LongId2String" />
+    </resultMap>
+    <select id="selectArticleCatalog" resultMap="articleCatalog">
+        select article_id,
+               first_release_date,
+               last_modified_time,
+               classification,
+               title,
+               is_public
+        from article
+        where abandoned=false
+        order by article_id desc
+        limit #{start},#{count}
+    </select>
+
+    <resultMap id="articleSummary" type="xyz.idaoteng.myblog.blog.entity.vo.ArticleSummary" >
+        <id property="articleId" column="article_id" typeHandler="xyz.idaoteng.myblog.typeHandler.LongId2String" />
+        <result property="title" column="title"/>
+        <collection property="tags" ofType="string" column="title"
+                    select="xyz.idaoteng.myblog.blog.dao.TagMapper.selectTags"/>
+    </resultMap>
+    <select id="selectArticleSummaries" resultMap="articleSummary">
+        select article_id,
+               first_release_date,
+               last_modified_time,
+               classification,
+               title,
+               summary
+        from article
+        where is_public=true and abandoned=false
+        order by article_id desc
+        limit #{start},#{count}
+    </select>
+
+    <resultMap id="articleContent" type="xyz.idaoteng.myblog.blog.entity.vo.ArticleContent" >
+        <id property="articleId" column="article_id" typeHandler="xyz.idaoteng.myblog.typeHandler.LongId2String" />
+    </resultMap>
+    <select id="selectArticleContent" resultMap="articleContent">
+        select article_id,
+               is_public,
+               content
+        from article
+        where article_id=#{id} and abandoned=false
+    </select>
+
+    <select id="selectSummaryWithTitle" resultMap="articleSummary">
+        select article_id,
+               first_release_date,
+               last_modified_time,
+               classification,
+               title,
+               summary
+        from article
+        where title in
+        <foreach collection="titles" item="titleName" separator="," close=")" open="(">
+            #{titleName}
+        </foreach>
+    </select>
+
+    <select id="selectSummaryWithCategory" resultMap="articleSummary">
+        select article_id,
+        first_release_date,
+        last_modified_time,
+        classification,
+        title,
+        summary
+        from article
+        where title in
+        <foreach collection="categories" item="category" separator="," close=")" open="(">
+            #{category}
+        </foreach>
+    </select>
+
+    <select id="selectDroppedArticleCatalog" resultMap="articleCatalog">
+        select article_id,
+               first_release_date,
+               last_modified_time,
+               classification,
+               title,
+               is_public
+        from article
+        where abandoned=true
+        order by article_id desc
+        limit #{start},#{count}
+    </select>
+
+    <select id="selectArticleSummaryById" resultMap="articleSummary">
+        select article_id,
+               first_release_date,
+               last_modified_time,
+               classification,
+               title,
+               summary
+        from article
+        where article_id=#{id} and is_public=true and abandoned=false
+    </select>
+</mapper>

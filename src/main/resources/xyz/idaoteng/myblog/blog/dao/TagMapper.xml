@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xyz.idaoteng.myblog.blog.dao.TagMapper">
+    <insert id="insertTags">
+        insert into article_tag (title_name, tag_name) values
+        <foreach collection="tagList" item="tag" separator="," >
+            (#{title}, #{tag})
+        </foreach>
+    </insert>
+
+    <select id="selectTitlesWithTag" resultType="java.lang.String">
+        select title_name
+        from article_tag
+        left join article a on a.title = article_tag.title_name
+        where tag_name=#{tagName} and a.is_public=true
+        limit #{start},#{size}
+    </select>
+
+    <select id="selectAllTags" resultType="java.lang.String">
+        select tag_name
+        from article_tag
+        left join article a on a.title = article_tag.title_name
+        where is_public=true
+        group by tag_name
+    </select>
+</mapper>
