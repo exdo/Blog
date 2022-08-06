@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="warn" monitorInterval="5">
     <properties>
+        <!--生产环境配置-->
         <property name="LOG_HOME">/root/myblog/logs</property>
     </properties>
 
