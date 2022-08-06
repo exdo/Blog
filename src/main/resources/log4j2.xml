@@ -10,6 +10,7 @@
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%-5level] %c{36}:%L:%n>>>    %m%n" />
         </Console>
 
+        <!--生产环境配置-->
         <RollingRandomAccessFile name="file"
                                  fileName="${LOG_HOME}/myblog-log.log"
                                  filePattern="${LOG_HOME}/myblog-log-%d{yyyy-MM-dd HH-mm}.log">
